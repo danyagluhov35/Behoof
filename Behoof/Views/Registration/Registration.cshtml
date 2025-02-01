@@ -1,0 +1,39 @@
+﻿@using Behoof.Models.User
+@model UserRegister
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<title>Регистрация</title>
+<link rel="stylesheet" href="/css/Registration/Registration.css" />
+
+<div class="container">
+    <div class="registration">
+        <div class="registration-container">
+            <h2 class="registration-title">Регистрация аккаунта</h2>
+
+            <form class="registration-form" method="post" asp-action="Registration" asp-controller="Registration">
+                <label>Эллектронная почта</label>
+                <input asp-for="Email" type="text" class="input-email">
+                <span asp-validation-for="Email"></span>
+                <label>Имя аккаунта</label>
+                <input asp-for="Login" type="text" class="input-login">
+                <span asp-validation-for="Login"></span>
+
+                <label>Пароль</label>
+                <input asp-for="Password" type="password" class="input-password">
+                <span asp-validation-for="Password"></span>
+                <label>Подтвердите пароль</label>
+                <input asp-for="ComparePassword" type="password" class="input-confirm-password">
+                <span asp-validation-for="Password"></span>
+
+                <input class="register-btn" type="submit" value="Зарегестрироваться">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>

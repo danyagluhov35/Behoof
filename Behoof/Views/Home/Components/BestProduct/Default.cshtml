@@ -1,0 +1,79 @@
+﻿@using Behoof.Models.Product;
+@model List<FoldProduct>
+
+
+@foreach(var item in Model){
+    <div class="best-product-item">
+        <div class="best-product-item-top">
+            <div class="best-product-item-top-name">
+                <p>@item.Name</p>
+            </div>
+            <div class="best-product-item-top-management">
+                <a href="#" class="best-product-item-top-management-like add-to-favorite">
+                    <input type="hidden" value="@item.Id"/>
+                    <img src="/icons/heart.png" alt="">
+                </a>
+                <a href="#" class="best-product-item-top-management-chart">
+                    <img src="/icons/chart.png" alt="">
+                </a>
+            </div>
+        </div>
+
+        <div class="best-product-item-bottom">
+            <div class="best-product-item-bottom-image">
+                <img src="@item.ImageLink" alt="Изображение временно отсутствует">
+            </div>
+            <div class="best-product-item-bottom-characteristics">
+                <div class="best-product-item-bottom-characteristics-design">
+                    <p>Дизайн</p>
+                    <div class="best-product-item-bottom-characteristics-design-area">
+                        @for(int i = 0; i < item.BallDesign; i++){
+                            <div class="design-area-step_1"></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="best-product-item-bottom-characteristics-batery">
+                    <p>Батарея</p>
+                    <div class="best-product-item-bottom-characteristics-design-area">
+                        @for (int i = 0; i < item.BallBatery; i++)
+                        {
+                            <div class="design-area-step_1"></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="best-product-item-bottom-characteristics-display">
+                    <p>Дисплей</p>
+                    <div class="best-product-item-bottom-characteristics-design-area">
+                        @for (int i = 0; i < item.BallAnswer; i++)
+                        {
+                            <div class="design-area-step_1"></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="best-product-item-bottom-characteristics-camera">
+                    <p>Камера</p>
+                    <div class="best-product-item-bottom-characteristics-design-area">
+                        @for (int i = 0; i < item.BallCamera; i++)
+                        {
+                            <div class="design-area-step_1"></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="best-product-item-bottom-characteristics-portatable">
+                    <p>Портативность</p>
+                    <div class="best-product-item-bottom-characteristics-design-area">
+                        @for (int i = 0; i < item.BallPortatable; i++)
+                        {
+                            <div class="design-area-step_1"></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

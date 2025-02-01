@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/_Layout/Layout.css">
+    <link rel="stylesheet" href="/css/nullcss.css">
+</head>
+<body>
+    <div class="menu-content-container">
+        <div class="menu-content">
+            <div class="menu-content-item">
+                <h2 class="menu-content-title">Каталог товаров</h2>
+
+                <ul class="menu-content-items">
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="menu-content-item">
+                <h2 class="menu-content-title">Каталог товаров</h2>
+
+                <ul class="menu-content-items">
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu-content-item">
+                <h2 class="menu-content-title">Каталог товаров</h2>
+
+                <ul class="menu-content-items">
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                    <li>
+                        <span></span>
+                        <a href="#">Смартфоны</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <a href="/Home/Index" class="header-logo">
+                    <img src="/images/behoof_logo.png" alt="">
+                </a>
+                <a href="/Home/Index" class="header-company-name">
+                    <h1>Behoof</h1>
+                </a>
+                <div class="prescription">
+                    <p>Лучшие цены в интернет магазинах</p>
+                </div>
+                <nav class="menu">
+                    <a href="#">Каталог товаров</a>
+                </nav>
+
+                <div class="search-product">
+                    <img class="loop" src="/icons/loop.png" alt="">
+                    <input type="search" placeholder="Найдется все!">
+                </div>
+
+                <div class="header-management">
+                    <a href="/Account/Favorite/Favorite" class="like">
+                        <img src="/icons/heart.png" alt="">
+                    </a>
+                    <a href="#" class="chart">
+                        <img src="/icons/chart.png" alt="">
+                    </a>
+                    @if(User?.Identity?.IsAuthenticated != false){
+                        <a href="/Account/Account/Profile" class="profile">
+                            <img src="/icons/user.png" alt="">
+                        </a>
+                    }
+                    else{
+                        <a href="/Authorization/Authorization" class="profile">
+                            <img src="/icons/user.png" alt="">
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        @RenderBody()
+
+
+
+        <footer>
+            <div class="container">
+                <div class="footer-items">
+                    <div class="footer-item">
+                        <div class="footer-item-logo">
+                            <div class="footer-item-logo-image">
+                                <img src="/images/behoof_logo.png" alt="">
+                            </div>
+                            <h1 class="footer-item-logo-name">Behoof</h1>
+                        </div>
+                        <div class="footer-item-messengers">
+                            <div class="footer-item-messengers-title">
+                                <p>Мы в соц сетях</p>
+                            </div>
+                            <div class="footer-item-messengers-links">
+                                <a href="#">
+                                    <img src="/icons/messenges/VK.png" alt="">
+                                </a>
+                                <a href="#">
+                                    <img src="/icons/messenges/TT.png" alt="">
+                                </a>
+                                <a href="#">
+                                    <img src="/icons/messenges/Inst.png" alt="">
+                                </a>
+                                <a href="#">
+                                    <img src="/icons/messenges/TG.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer-item">
+                        <div class="footer-item-title">
+                            <p>Пользователю</p>
+                        </div>
+                        <a href="#">Связаться с нами</a>
+                        <a href="#">Поддержка пользователей</a>
+                        <a href="#">FAQ & Руководства</a>
+                        <a href="#">Политика конфиденциальности</a>
+                        <a href="#">Пользовательское соглашение</a>
+                    </div>
+
+                    <div class="footer-item">
+                        <div class="footer-item-title">
+                            <p>Популярные категории</p>
+                        </div>
+                        <a href="#">Смартфоны</a>
+                        <a href="#">Teteras electricas</a>
+                        <a href="#">Стиральные машины</a>
+                        <a href="#">Телевизоры</a>
+                        <a href="#">Ноутбуки</a>
+                    </div>
+
+                    <div class="footer-item">
+                        <div class="footer-item-title">
+                            <p>Команда Behoof</p>
+                        </div>
+                        <a href="#">О нас</a>
+                        <a href="#">Работа у нас</a>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>Является творческой работой, проект не несет цели для плагиата, или выставки его на общественное использование</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+
+        // При наведении на элементы меню
+        $(document).on("mouseenter", ".menu-content-items li a", async function(e){
+            $(e.target).toggleClass("active")
+        })
+        $(document).on("mouseleave", ".menu-content-items li a", async function(e){
+            $(e.target).removeClass("active")
+        })
+
+        // При нажатии на кнопку "Каталог"
+        $(document).on("click", ".menu a", async function(e){
+            $(".menu-content-container").toggleClass("active")
+            $(".wrapper").toggleClass("active")
+        })
+
+    </script>
+</body>
+</html>

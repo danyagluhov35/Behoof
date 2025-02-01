@@ -1,0 +1,169 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userId = User.Claims.FirstOrDefault(u => u.Type == "Id")?.Value;
+    var countryId = User.Claims.FirstOrDefault(u => u.Type == "CountryId")?.Value;
+    var cityId = User.Claims.FirstOrDefault(u => u.Type == "CityId")?.Value;
+}
+@using Behoof.Domain.Entity
+@model List<Country>
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<link rel="stylesheet" href="/css/Areas/Account/Account.css"/>
+<link rel="stylesheet" href="/css/nullcss.css" />
+
+
+<div class="account">
+    <div class="container">
+        <div class="account-name">
+            <h2>@User?.Identity?.Name</h2>
+            <a class="account-edit-name" href="#">
+                <img src="/account/icons/icon.png" alt="">
+            </a>
+        </div>
+
+        <div class="account-items">
+            <div class="account-item">
+                <div class="account-item-container">
+                    <h2 class="account-item-title">Настройки</h2>
+
+                    <div class="account-items-switch">
+                        <div class="account-item-swtich">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <p>Получать пуш уведомления</p>
+                        </div>
+
+                        <div class="account-item-swtich">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            <p>Получать уведомления на эллектронную почту</p>
+                        </div>
+                    </div>
+                    <div class="account-items-select">
+                        <form class="user-country-form">
+                            <input type="hidden" name="User.Id" value="@userId" />
+                            <div class="account-item-select">
+                                <img src="/account/icons/icons8-планета-48.png" alt="">
+                                <p>Страна:</p>
+                                <select name="User.CountryId">
+                                    @foreach(var country in Model){
+                                        if(country.Id == countryId){
+                                            <option selected value="@country.Id">@country.Name</option>
+                                        }
+                                        else{
+                                            <option value="@country.Id">@country.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="account-item-select">
+                                <img src="/account/icons/icons8-здание-50.png" alt="">
+                                <p>Город:</p>
+                                <select id="select-city" name="User.CityId">
+                                    @foreach(var country in Model){
+                                        foreach(var city in country?.City){
+                                            if (city.Id == cityId)
+                                            {
+                                                <option selected value="@city.Id">@city.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@city.Id">@city.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="account-item">
+                <div class="account-item-container">
+                    <h2 class="account-item-title">Поддержка</h2>
+
+
+                    <div class="account-item-questions">
+                        <ul class="questions-menu">
+                            <li class="questions-link">
+                                <a href="">
+                                    <img src="/account/icons/user.png" alt="">
+                                    <p>Ваши вопросы</p>
+                                    <div class="querstion-count">
+                                        <p>6</p>
+                                    </div>
+                                </a>
+                                <ul class="quetion-sub-menu">
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос первый</a>
+                                    </li>
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос второй</a>
+                                    </li>
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос третий</a>
+                                    </li>
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос четвертый</a>
+                                    </li>
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос пятый</a>
+                                    </li>
+                                    <li class="questions-sub-link">
+                                        <a href="#">Вопрос шестой</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="account-item-havequestion">
+                        <h2 class="account-item-havequestion-title">
+                            Есть вопросы?
+                        </h2>
+
+                        <p>Напишите нам и мы вам с радостью поможем с любой проблемой</p>
+
+                        <a class="write-to-support" href="#">
+                            Написать в поддержку
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="account-item">
+                <div class="account-item-container">
+                    <h2 class="account-item-title">Поддержка</h2>
+                    <div class="account-item-youracc">
+
+                        <a class="reset-password" href="#">Сбросить пароль</a>
+                        <a class="logout" asp-area="Account" asp-controller="Account" asp-action="Exit">Выйти</a>
+                        <a class="delete-account" asp-area="Account" asp-controller="Account" asp-action="Delete" asp-route-id="@userId">Удалить аккаунт</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).on("change", ".user-country-form", async function(e){
+        const formData = new FormData(e.target.form)
+
+        const response = await fetch("/Account/Account/Update", {
+            method : "POST",
+            body : formData
+        })
+    })
+</script>

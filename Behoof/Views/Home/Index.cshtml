@@ -1,0 +1,255 @@
+﻿@using Behoof.ViewModels
+@model HomeViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="/css/Home/index.css"/>
+
+
+<title>Behoof</title>
+
+<div class="window-request-wrapper">
+    <div class="window-request">
+        <span class="close"></span>
+        <div class="window-request-container">
+            <p>Пожалуйста, что бы продолжить, авторизуйтесь</p>
+
+            <div class="window-request-buttons">
+                <a href="/Authorization/Authorization" class="request-registration request-btn">Авторизация</a>
+                <a href="/Registration/Registration" class="request-auth request-btn">Регистрация</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper-announcement">
+    <div class="container">
+        <div class="announcement-items">
+            <div class="announcement-item">
+                <h1>1.8 млн товаров в 2272 магазинах найти, сравни, выбирай!</h1>
+                <a href="#">Перейти к категориям</a>
+            </div>
+            <div class="announcement-item">
+                <h1>Топ-10 смартфонов 2023 года</h1>
+                <a href="#">Смотреть</a>
+                <img src="/main/images/gudjet/image-17.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper-best-choose">
+    <div class="container">
+        <div class="best-choose">
+            <h2>Лучший выбор</h2>
+
+            <div class="best-choose-items">
+                @foreach(var item in Model.Category){
+                    <input type="hidden" class="categoryId" value="@item.Id"/>
+                    <a href="#" class="best-choose-item">
+                        <div class="best-choose-image">
+                            <img src="@item.ImageLink" alt="">
+                        </div>
+                        <div class="best-choose-name">
+                            <p>@item.Name</p>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="best-products-items-container">
+            
+            <form class="best-options" style="display:none">
+                <a href="#">
+                    Дизайн
+                    <input type="hidden" value="DesignSort">
+                </a>
+                <a href="#">
+                    Портативность
+                    <input type="hidden" value="PortatableSort">
+                </a>
+                <a href="#">
+                    Камера
+                    <input type="hidden" value="CameraSort">
+                </a>
+                <a href="#">
+                    Ответ
+                    <input type="hidden">
+                </a>
+                <a href="#">
+                    Дисплей
+                    <input type="hidden">
+                </a>
+                <a href="#">
+                    Батарея
+                    <input type="hidden">
+                </a>
+            </form>
+            <div class="best-product-items">
+                @* @await Component.InvokeAsync("BestProduct") *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="new-products">
+        <h2 class="new-product-title">Новинки</h2>
+
+        <div class="new-product-items">
+            @foreach(var item in Model.Product){
+                <div class="new-product-item">
+                    <div class="new-product-item-container">
+                        <div class="new-product-image">
+                            <img src="@item.ImageLink" alt="">
+                        </div>
+                        <div class="new-product-category-title">
+                            <p></p>
+                        </div>
+                        <div class="new-product-name">
+                            <p>@item.Name</p>
+                        </div>
+                        <div class="new-product-bottom">
+                            <div class="new-product-price">
+                                <div class="new-product-price-top">
+                                    <p>Цена</p>
+                                    <span>13%</span>
+                                </div>
+                                <p class="new-product-price-fact">@item.Price</p>
+                            </div>
+                            <div class="new-product-bottom-management">
+                                <a href="#" class="best-product-item-top-management-like add-to-favorite">
+                                    <input type="hidden" value="@item.Id" />
+                                    <img src="/icons/heart.png" alt="">
+                                </a>
+                                <div class="new-product-bottom-management-chart">
+                                    <img src="/main/icons/chart.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="articles">
+    <div class="container">
+        <h2 class="articles-title">Обзоры</h2>
+
+        <div class="articles-items">
+            <div class="articles-item">
+                <div class="articles-image">
+                    <img src="/main/images/articles/Frame 2371.png" alt="">
+                </div>
+                <div class="articles-item-container">
+                    <div class="articles-item-name">
+                        <p>Обзор устаревших смартфонов</p>
+                    </div>
+                    <div class="articles-item-desc">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim porro deserunt quis eum maxime.</p>
+                    </div>
+                    <a href="#" class="articles-item-btn">Смотреть ></a>
+                </div>
+            </div>
+
+            <div class="articles-item">
+                <div class="articles-image">
+                    <img src="/main/images/articles/Frame 2371-1.png" alt="">
+                </div>
+                <div class="articles-item-container">
+                    <div class="articles-item-name">
+                        <p>Обзор устаревших смартфонов</p>
+                    </div>
+                    <div class="articles-item-desc">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim porro deserunt quis eum maxime.</p>
+                    </div>
+                    <a href="#" class="articles-item-btn">Смотреть ></a>
+                </div>
+            </div>
+
+            <div class="articles-item">
+                <div class="articles-image">
+                    <img src="/main/images/articles/Frame 2371-2.png" alt="">
+                </div>
+                <div class="articles-item-container">
+                    <div class="articles-item-name">
+                        <p>Обзор устаревших смартфонов</p>
+                    </div>
+                    <div class="articles-item-desc">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim porro deserunt quis eum maxime.</p>
+                    </div>
+                    <a href="#" class="articles-item-btn">Смотреть ></a>
+                </div>
+            </div>
+
+            <div class="articles-item">
+                <div class="articles-image">
+                    <img src="/main/images/articles/Frame 2371-3.png" alt="">
+                </div>
+                <div class="articles-item-container">
+                    <div class="articles-item-name">
+                        <p>Обзор устаревших смартфонов</p>
+                    </div>
+                    <div class="articles-item-desc">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim porro deserunt quis eum maxime.</p>
+                    </div>
+                    <a href="#" class="articles-item-btn">Смотреть ></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Окно лучших товаров
+    $(document).on("click", ".best-choose-item", async function(e){
+        e.preventDefault()
+        var formData = e.target.closest(".best-choose-items")
+        var data = formData.querySelector(".categoryId").value
+        console.log(data)
+        const response = await fetch("/Home/GetProductToCategory", {
+            method : "POST",
+            headers : {"Accept" : "application/json", "Content-Type" : "application/json" },
+            body : JSON.stringify(data)
+        })
+        if(response.ok == true){
+            document.querySelector(".best-product-items").innerHTML = await response.text()
+            document.querySelector(".best-options").style.display = "block"
+        }
+    })
+    // Сортировка лучших товаров по параметрам качества т.е по "дисплею, портативности"
+    $(document).on("click", ".best-options a", async function(e){
+        e.preventDefault()
+        const data = e.target.querySelector("input").value
+        const response = await fetch(`/Home/GetProductToParameters?sortState=${data}`)
+
+        if(response.ok == true){
+            document.querySelector(".best-product-items").innerHTML = await response.text()
+        }
+    })
+
+    // Добавление товара в избранное
+    $(document).on("click", ".add-to-favorite", async function(e){
+        e.preventDefault()
+        const productId = $(this).find("input").val()
+        const response = await fetch(`/Account/Favorite/Add?productId=${productId}`)
+
+        if(response.ok == true){
+
+        }
+        else{
+            $(".window-request-wrapper").addClass("active")
+        }
+    })
+
+    // Закрытие окна, о просьбе войти в систему
+    $(document).on("click", ".close", async function(e){
+        $(".window-request-wrapper").removeClass("active")
+    })
+</script>

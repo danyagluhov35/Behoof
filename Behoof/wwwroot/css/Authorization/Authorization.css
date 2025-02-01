@@ -1,0 +1,126 @@
+﻿
+.login {
+    margin: 100px 0 200px 0;
+}
+
+.login-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.login-items {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: 350px;
+}
+
+.login-item {
+    border-radius: 10px 0 0 10px;
+}
+
+.login-item-container {
+    padding: 50px 50px 0 50px;
+}
+
+.login-title {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.login-title-left {
+    color: #fff;
+}
+
+.login-desc {
+    color: #ddd4d4;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.login-item-left {
+    background-color: #FF4D4D;
+}
+
+.register {
+    display: inline-block;
+    background-color: #fff;
+    padding: 10px;
+    color: #000;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.login-item-right {
+    background-color: #F2F5F9;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+    .login-form > label {
+        color: #4F6786;
+    }
+
+.login-input {
+    background-color: #fff;
+    padding: 10px 0 10px 10px;
+    border-radius: 10px;
+    margin: 10px 0 20px 0;
+}
+
+.login-form-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.signin {
+    color: #fff;
+    background-color: #FF4D4D;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.reset-password {
+    color: #263141;
+}
+
+.login-form span {
+    color: red;
+    display: block;
+    margin-top: -15px;
+    margin-bottom: 10px;
+}
+
+@media(max-width:665px) {
+    .login-items {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: 350px 250px;
+        padding: 10px;
+    }
+
+    .login-item-left {
+        order: 2;
+    }
+}
+
+@media(max-width:330px) {
+    .login-form-bottom {
+        flex-direction: column;
+        padding-bottom: 10px;
+    }
+
+    .login-items {
+        grid-template-rows: 370px 250px;
+    }
+
+    .signin {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}

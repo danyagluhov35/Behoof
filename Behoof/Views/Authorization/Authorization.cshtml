@@ -1,0 +1,51 @@
+﻿@using Behoof.Models.User;
+@model UserLogin;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<link rel="stylesheet" href="/css/Authorization/Authorization.css"/>
+
+
+<title>Вход в аккаунт</title>
+<div class="login">
+    <div class="login-container">
+        <div class="login-items">
+            <div class="login-item login-item-left">
+                <div class="login-item-container">
+                    <h2 class="login-title login-title-left">Вы еще не с нами?</h2>
+                    <p class="login-desc">
+                        Создайте аккаунт чтобы получать уведомления об изменении цен и синхронизировать ваши товары на всех устройствах.
+                    </p>
+                    <a class="register" href="/Registration/Registration">Зарегестрироваться</a>
+                </div>
+            </div>
+
+            <div class="login-item login-item-right">
+                <div class="login-item-container">
+                    <h2 class="login-title login-title-right">Вход в аккаунт Behoof</h2>
+                    <form class="login-form" asp-action="Authorization" asp-controller="Authorization" method="post">
+                        <label>Эллектронная почта</label>
+                        <input asp-for="Email" type="text" class="login-input login-email">
+                        <span asp-validation-for="@Model.Email"></span>
+                        <label>Пароль</label>
+                        <input asp-for="Password" type="text" class="login-input login-password">
+                        <span asp-validation-for="Password"></span>
+                        <div style="text-align: center;margin-bottom: 15px;color: red;" asp-validation-summary="ModelOnly"></div>
+                        <div class="login-form-bottom">
+                            <input class="signin" type="submit" value="Войти">
+                            <a class="reset-password" href="#">Восстановить пароль</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>
