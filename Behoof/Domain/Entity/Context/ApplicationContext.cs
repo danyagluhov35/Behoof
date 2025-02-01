@@ -22,7 +22,7 @@ namespace Behoof.Domain.Entity.Context
         public DbSet<Favorite> Favorite { get; set; } = null!;
         public DbSet<FavoriteItem> FavoriteItem { get; set; } = null!;
         public DbSet<Supplier> Supplier { get; set; } = null!;
-        public DbSet<SupplierItem> SupplierItem { get; set; } = null!;
+        public DbSet<HistoryProduct> HistoryProduct { get; set; } = null!;
         public DbSet<SupplierProduct> SupplierProduct { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

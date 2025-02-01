@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Behoof.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_ProductSupplier : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,56 +174,6 @@ namespace Behoof.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SupplierItem",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateOfCreate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SupplierItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SupplierItem_Supplier_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Supplier",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Passoword = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    FavoriteId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_City_CityId",
-                        column: x => x.CityId,
-                        principalTable: "City",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Country_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Country",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Favorite_FavoriteId",
-                        column: x => x.FavoriteId,
-                        principalTable: "Favorite",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -232,6 +182,8 @@ namespace Behoof.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MinPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MaxPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     DateCreate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CameraId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -246,8 +198,7 @@ namespace Behoof.Migrations
                     BallBatery = table.Column<int>(type: "int", nullable: true),
                     BallCamera = table.Column<int>(type: "int", nullable: true),
                     BallAnswer = table.Column<int>(type: "int", nullable: true),
-                    BallPortatable = table.Column<int>(type: "int", nullable: true),
-                    SupplierItemId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    BallPortatable = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -288,11 +239,6 @@ namespace Behoof.Migrations
                         principalTable: "Power",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Product_SupplierItem_SupplierItemId",
-                        column: x => x.SupplierItemId,
-                        principalTable: "SupplierItem",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Product_System_SystemId",
                         column: x => x.SystemId,
                         principalTable: "System",
@@ -301,6 +247,38 @@ namespace Behoof.Migrations
                         name: "FK_Product_YearOfRealise_YearOfRealiseId",
                         column: x => x.YearOfRealiseId,
                         principalTable: "YearOfRealise",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Passoword = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CountryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FavoriteId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_City_CityId",
+                        column: x => x.CityId,
+                        principalTable: "City",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Users_Country_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Country",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Users_Favorite_FavoriteId",
+                        column: x => x.FavoriteId,
+                        principalTable: "Favorite",
                         principalColumn: "Id");
                 });
 
@@ -322,6 +300,25 @@ namespace Behoof.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_FavoriteItem_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HistoryProduct",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    DateUpdate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoryProduct", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistoryProduct_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id");
@@ -367,6 +364,11 @@ namespace Behoof.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HistoryProduct_ProductId",
+                table: "HistoryProduct",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Product_CameraId",
                 table: "Product",
                 column: "CameraId");
@@ -402,11 +404,6 @@ namespace Behoof.Migrations
                 column: "PowerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_SupplierItemId",
-                table: "Product",
-                column: "SupplierItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Product_SystemId",
                 table: "Product",
                 column: "SystemId");
@@ -415,11 +412,6 @@ namespace Behoof.Migrations
                 name: "IX_Product_YearOfRealiseId",
                 table: "Product",
                 column: "YearOfRealiseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SupplierItem_SupplierId",
-                table: "SupplierItem",
-                column: "SupplierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SupplierProduct_ProductId",
@@ -451,6 +443,9 @@ namespace Behoof.Migrations
                 name: "FavoriteItem");
 
             migrationBuilder.DropTable(
+                name: "HistoryProduct");
+
+            migrationBuilder.DropTable(
                 name: "SupplierProduct");
 
             migrationBuilder.DropTable(
@@ -458,6 +453,9 @@ namespace Behoof.Migrations
 
             migrationBuilder.DropTable(
                 name: "Product");
+
+            migrationBuilder.DropTable(
+                name: "Supplier");
 
             migrationBuilder.DropTable(
                 name: "City");
@@ -487,9 +485,6 @@ namespace Behoof.Migrations
                 name: "Power");
 
             migrationBuilder.DropTable(
-                name: "SupplierItem");
-
-            migrationBuilder.DropTable(
                 name: "System");
 
             migrationBuilder.DropTable(
@@ -497,9 +492,6 @@ namespace Behoof.Migrations
 
             migrationBuilder.DropTable(
                 name: "Country");
-
-            migrationBuilder.DropTable(
-                name: "Supplier");
         }
     }
 }

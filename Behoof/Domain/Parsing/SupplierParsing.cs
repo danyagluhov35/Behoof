@@ -75,7 +75,7 @@ namespace Behoof.Domain.Parsing2
 
         public virtual async Task SaveOnDb()
         {
-            var supplierItem2 = db.SupplierItem.Include(s => s.Products).ToList();
+            var supplierItem2 = db.Product.ToList();
 
 
             var productNodes = Document.DocumentNode.SelectNodes(ClassElementCard);
@@ -89,26 +89,25 @@ namespace Behoof.Domain.Parsing2
 
                     if (name != null && price != null)
                     {
-                        var product = db.SupplierItem
-                            .Include(s => s.Supplier)
-                            .Include(s => s.Products)
-                            .FirstOrDefault(p => p.Products.First().Name == name.InnerText && p.SupplierId == _SupplierId)
-                            ;
+                        var product = db.SupplierProduct
+                            .Include(p => p.Supplier)
+                            .Include(p => p.Product)
+                            .Where(p => p.Product.Name == name.InnerText && p.Supplier.Id == _SupplierId)
+                            .FirstOrDefault();
+
                         if (product == null)
                         {
-                            var productData = new Product() { Name = name.InnerText, Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")), CategoryId = "1" };
+                            var productData = new Product() 
+                            { 
+                                Name = name.InnerText, 
+                                Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")), 
+                                MinPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
+                                MaxPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
+                                CategoryId = "1" 
+                            };
                             db.Product.Add(productData);
                             db.SaveChanges();
 
-                            SupplierItem supplierItem = new SupplierItem()
-                            {
-                                Products = new List<Product> { productData },
-                                SupplierId = _SupplierId,
-                                MinPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
-                                MaxPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
-                            };
-                            db.SupplierItem.Add(supplierItem);
-                            db.SaveChanges();
 
                             var supplierProduct = new SupplierProduct()
                             {
@@ -135,21 +134,35 @@ namespace Behoof.Domain.Parsing2
 
                     if (name != null && price != null)
                     {
-                        var product = db.SupplierItem
-                            .Include(s => s.Supplier)
-                            .Include(s => s.Products)
-                            .FirstOrDefault(p => p.Products.First().Name == name.InnerText && p.SupplierId == _SupplierId)
-                            ;
+                        var product = db.SupplierProduct
+                            .Include(p => p.Supplier)
+                            .Include(p => p.Product)
+                            .Where(p => p.Product.Name == name.InnerText && p.Supplier.Id == _SupplierId)
+                            .FirstOrDefault();
+
                         if (product != null)
                         {
-                            var newProduct = new Product() 
+                            
+                            var productHistory = db.HistoryProduct
+                                .Include(ph => ph.Product)
+                                .Where(p => p.ProductId == product.Product.Id)
+                                .ToList();
+
+                            var newProductHistory = new HistoryProduct()
                             {
-                                Name = product.Products.FirstOrDefault()?.Name,
-                                Price = product.Products.FirstOrDefault()?.Price,
+                                ProductId = product.Product.Id,
+                                Price = product.Product.Price
                             };
-                            product.Products.Add(newProduct);
-                            db.Entry(product).State = EntityState.Modified;
-                            await db.SaveChangesAsync();
+                            db.HistoryProduct.Add(newProductHistory);
+                            db.SaveChanges();
+                            
+                            
+                            product.Product.Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", ""));
+                            product.Product.MinPrice = productHistory.Min(p => p.Product.Price);
+                            product.Product.MaxPrice = productHistory.Max(p => p.Product.Price);
+
+                            db.Product.Update(product.Product);
+                            db.SaveChanges();
                         }
                     }
                 }
