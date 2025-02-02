@@ -1,27 +1,27 @@
-﻿using Behoof.Domain.Entity;
-using Behoof.IService;
-using Behoof.Models.User;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Behoof.Application.IService;
+using Behoof.Application.DTO;
+using Behoof.Application.Service;
 
 namespace Behoof.Controllers
 {
     public class RegistrationController : Controller
     {
-        private IAccountService AccountService;
-        public RegistrationController(IAccountService accountService)
+        private IAccountAppService AccountAppService;
+        public RegistrationController(IAccountAppService accountAppService)
         {
-            AccountService = accountService;
+            AccountAppService = accountAppService;
         }
         public async Task<IActionResult> Registration()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Registration(UserRegister user)
+        public async Task<IActionResult> Registration(UserRegisterDto userRegisterDto)
         {
             if (ModelState.IsValid)
             {
-                await AccountService.Register(user);
+                await AccountAppService.Register(userRegisterDto);
                 return RedirectToAction("Index", "Home");
             }
             return View();

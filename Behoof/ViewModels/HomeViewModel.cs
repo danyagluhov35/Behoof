@@ -1,5 +1,5 @@
-﻿using Behoof.Domain.Entity;
-using Behoof.Models.Product;
+﻿using Behoof.Infrastructure.Data;
+using Behoof.Application.DTO;
 
 namespace Behoof.ViewModels
 {
