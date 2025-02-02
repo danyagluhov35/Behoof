@@ -30,7 +30,7 @@ namespace Behoof.Domain.Parsing2
         public SupplierParsing(SupplierSetting supplierSetting, ApplicationContext db)
         {
             Option = new ChromeOptions();
-            Option.AddArgument("--headless");
+            //Option.AddArgument("--headless");
             Option.AddArgument("--disable-blink-features=AutomationControlled");
 
             Document = new HtmlDocument();
@@ -49,12 +49,12 @@ namespace Behoof.Domain.Parsing2
         public virtual async Task LoadPage()
         {
             Driver.Navigate().GoToUrl(Url);
+            Thread.Sleep(3000);
             while (true)
             {
                 try
                 {
                     JavaScriptExecutor.ExecuteScript("window.scrollTo(0, document.body.scrollHeight);");
-                    Thread.Sleep(3000);
                     var loadMoreButton = WaitDriver.Until(d => d.FindElement(By.XPath(ClassElementButtonMore)));
 
                     JavaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", loadMoreButton);
@@ -62,7 +62,7 @@ namespace Behoof.Domain.Parsing2
                     JavaScriptExecutor.ExecuteScript("arguments[0].click();", loadMoreButton);
                     Thread.Sleep(3000);
                 }
-                catch (NoSuchElementException ex)
+                catch (Exception ex)
                 {
                     break;
                 }
@@ -89,30 +89,34 @@ namespace Behoof.Domain.Parsing2
 
                     if (name != null && price != null)
                     {
-                        var product = db.Product.FirstOrDefault(p => p.Name == name.InnerText);
+                        var product = db.SupplierItem
+                            .Include(s => s.Supplier)
+                            .Include(s => s.Products)
+                            .FirstOrDefault(p => p.Products.First().Name == name.InnerText && p.SupplierId == _SupplierId)
+                            ;
                         if (product == null)
                         {
-                            var productData = new Product() { Name = name.InnerText, Price = Convert.ToDecimal(price.InnerText), CategoryId = "1" };
-                            await db.Product.AddAsync(productData);
-                            await db.SaveChangesAsync();
+                            var productData = new Product() { Name = name.InnerText, Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")), CategoryId = "1" };
+                            db.Product.Add(productData);
+                            db.SaveChanges();
 
                             SupplierItem supplierItem = new SupplierItem()
                             {
                                 Products = new List<Product> { productData },
                                 SupplierId = _SupplierId,
-                                MinPrice = Convert.ToDecimal(price.InnerText),
-                                MaxPrice = Convert.ToDecimal(price.InnerText),
+                                MinPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
+                                MaxPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
                             };
-                            await db.SupplierItem.AddAsync(supplierItem);
-                            await db.SaveChangesAsync();
+                            db.SupplierItem.Add(supplierItem);
+                            db.SaveChanges();
 
                             var supplierProduct = new SupplierProduct()
                             {
                                 SupplierId = _SupplierId,
                                 ProductId = productData?.Id
                             };
-                            await db.SupplierProduct.AddAsync(supplierProduct);
-                            await db.SaveChangesAsync();
+                            db.SupplierProduct.Add(supplierProduct);
+                            db.SaveChanges();
                         }
                     }
                 }
@@ -131,17 +135,21 @@ namespace Behoof.Domain.Parsing2
 
                     if (name != null && price != null)
                     {
-                        var product = db.Product.FirstOrDefault(p => p.Name == name.InnerText);
+                        var product = db.SupplierItem
+                            .Include(s => s.Supplier)
+                            .Include(s => s.Products)
+                            .FirstOrDefault(p => p.Products.First().Name == name.InnerText && p.SupplierId == _SupplierId)
+                            ;
                         if (product != null)
                         {
-                            var supplierItem = db.SupplierItem.Where(s => s.Products.Select(u => u.Id).FirstOrDefault() == product.Id).Include(s => s.Products).FirstOrDefault();
-                            if (supplierItem != null)
+                            var newProduct = new Product() 
                             {
-                                var newProduct = new Product();
-                                supplierItem.Products.Add(newProduct);
-                                db.Entry(supplierItem).State = EntityState.Modified;
-                                await db.SaveChangesAsync();
-                            }
+                                Name = product.Products.FirstOrDefault()?.Name,
+                                Price = product.Products.FirstOrDefault()?.Price,
+                            };
+                            product.Products.Add(newProduct);
+                            db.Entry(product).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
                         }
                     }
                 }

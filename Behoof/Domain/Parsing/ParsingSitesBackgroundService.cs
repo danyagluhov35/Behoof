@@ -21,27 +21,27 @@ namespace Behoof.Domain.Parsing
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if(DateTime.Now.Hour >= 23 &&  DateTime.Now.Hour < 24)
+                if(DateTime.Now.Hour >= 0 &&  DateTime.Now.Hour < 15)
                 {
                     await _Semaphore.WaitAsync(stoppingToken);
                     using(var scope = ServiceProvider.CreateScope())
                     {
                         var db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                        var factory = new SupplierFactory(Configuration, db);
 
                         SupplierParsing[] suppliers =
                         {
-                            new SupplierFactory(Configuration, db).CreateSupplier("CityLink")
+                            factory.CreateSupplier("CityLink"),
+                            factory.CreateSupplier("Mvideo")
                         };
 
-                        foreach(var item in suppliers)
+                        var tasks = suppliers.Select(async item =>
                         {
-                            await Task.Run(async() =>
-                            {
-                                await item.LoadPage();
-                                await item.SaveOnDb();
-                                await item.Update();
-                            });
-                        }
+                            await item.LoadPage();
+                            await item.SaveOnDb();
+                            await item.Update();
+                        });
+                        await Task.WhenAll(tasks);
                     }
                     _Semaphore.Release();
                 }
