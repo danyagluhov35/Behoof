@@ -1,4 +1,4 @@
-﻿using Behoof.Domain.Entity;
+﻿using Behoof.Infrastructure.Data;
 
 namespace Behoof.ViewModels
 {

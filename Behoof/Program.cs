@@ -1,15 +1,14 @@
 using System;
 using System.Text.Json.Serialization;
 using AutoMapper;
-using Behoof.Domain.AutoMapper;
-using Behoof.Domain.Entity.Context;
-using Behoof.Domain.JwtTokenSetting;
-using Behoof.Domain.Middleware;
-using Behoof.Domain.Middleware.Jwt;
-using Behoof.Domain.Parsing;
-using Behoof.Domain.Parsing2;
-using Behoof.IService;
-using Behoof.Service;
+using Behoof.Application.IService;
+using Behoof.Application.Service;
+using Behoof.Core.JwtTokenSetting;
+using Behoof.Infrastructure.BackgroundServices;
+using Behoof.Infrastructure.Data;
+using Behoof.Infrastructure.IService;
+using Behoof.Infrastructure.Service;
+using Behoof.Middleware.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -24,11 +23,20 @@ builder.Services.AddControllersWithViews().AddJsonOptions(op =>
 {
     op.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
-builder.Services.AddAuthorization();
-builder.Services.AddTransient<IAccountService, AccountService>();
-builder.Services.AddTransient<ICategoryService, CategoryService>();
-builder.Services.AddTransient<IProductSorterService, ProductSorterService>();
-builder.Services.AddTransient<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<IAccountAppService, AccountAppService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+builder.Services.AddScoped<ICategoryAppService, CategoryAppService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+builder.Services.AddScoped<IFavoriteAppService, FavoriteAppService>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+
+builder.Services.AddScoped<IProductAppService, ProductAppService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+
+
 builder.Services.AddTransient<IFoldProductMemoryCacheService, FoldProductMemoryCacheService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<SupplierFactory>();
@@ -47,7 +55,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-builder.Services.AddAutoMapper(typeof(UserMapper));
 
 
 

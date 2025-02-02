@@ -1,34 +1,31 @@
-﻿using Behoof.Domain.Entity;
-using Behoof.IService;
-using Behoof.Models.User;
+﻿using Behoof.Application.DTO;
+using Behoof.Application.IService;
+using Behoof.Application.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Behoof.Controllers
 {
     public class AuthorizationController : Controller
     {
-        private IAccountService AccountService;
-        public AuthorizationController(IAccountService accountService)
+        private IAccountAppService AccountAppService;
+        public AuthorizationController(IAccountAppService accountAppService)
         {
-            AccountService = accountService;
+            AccountAppService = accountAppService;
         }
         public async Task<IActionResult> Authorization()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Authorization(UserLogin user)
+        public async Task<IActionResult> Authorization(UserLoginDto userLoginDto)
         {
             if (ModelState.IsValid)
             {
-                var data = await AccountService.Validation(user);
-                if (data != null)
-                {
-                    await AccountService.Login(data);
+                var result = await AccountAppService.Login(userLoginDto);
+                if(result != null)
                     return RedirectToAction("Profile", "Account", new { area = "Account" });
-                }
+                ModelState.AddModelError("", "Пользователь не найден");
             }
-            ModelState.AddModelError("", "Пользователь не найден");
             return View();
         }
     }

@@ -5,7 +5,7 @@
     var countryId = User.Claims.FirstOrDefault(u => u.Type == "CountryId")?.Value;
     var cityId = User.Claims.FirstOrDefault(u => u.Type == "CityId")?.Value;
 }
-@using Behoof.Domain.Entity
+@using Behoof.Infrastructure.Data;
 @model List<Country>
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

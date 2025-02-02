@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using Behoof.Domain.Entity;
-using Behoof.Domain.Entity.Context;
-using Behoof.IService;
 using Behoof.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Behoof.Infrastructure.Data;
+using Behoof.Infrastructure.IService;
+using Behoof.Application.IService;
 
 namespace Behoof.Areas.Account.Controllers
 {
@@ -13,20 +13,19 @@ namespace Behoof.Areas.Account.Controllers
     [Authorize]
     public class FavoriteController : Controller
     {
-        private IFavoriteService FavoriteService;
-        private IAccountService AccountService;
+        private IFavoriteAppService FavoriteAppService;
+        private IAccountAppService AccountAppService;
         private ApplicationContext db;
-        public FavoriteController(IFavoriteService favoriteService, IAccountService accountService, ApplicationContext db)
+        public FavoriteController(IFavoriteAppService favoriteAppService, IAccountAppService accountAppService, ApplicationContext db)
         {
-            FavoriteService = favoriteService;
-            AccountService = accountService;
+            FavoriteAppService = favoriteAppService;
+            AccountAppService = accountAppService;
             this.db = db;
         }
 
         public IActionResult Favorite()
         {
             var userId = HttpContext.User.Claims.FirstOrDefault(u => u.Type == "Id")?.Value;
-
 
             var favoriteProduct = db.Favorite
                 .Include(f => f.FavoriteItem)!
@@ -46,8 +45,8 @@ namespace Behoof.Areas.Account.Controllers
                     {
                         DateUpdate = h.DateUpdate,
                     }).ToList()
-                }).ToList()
-                ;
+                })
+                .ToList();
 
 
 
@@ -56,9 +55,9 @@ namespace Behoof.Areas.Account.Controllers
 
         public async Task<IActionResult> Add(string productId)
         {
-            var userId = await AccountService.IsRegistered();
+            var userId = await AccountAppService.IsRegistered();
             if (userId != null)
-                await FavoriteService.Add(productId, userId);
+                await FavoriteAppService.Add(productId, userId);
             return new JsonResult(new { message = "404" });
         }
     }

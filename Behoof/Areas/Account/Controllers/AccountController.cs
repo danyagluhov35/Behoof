@@ -1,6 +1,7 @@
-﻿using Behoof.Domain.Entity;
-using Behoof.Domain.Entity.Context;
-using Behoof.IService;
+﻿using Behoof.Application.DTO;
+using Behoof.Application.IService;
+using Behoof.Infrastructure.Data;
+using Behoof.Infrastructure.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +12,19 @@ namespace Behoof.Areas.Account.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private IAccountService AccountService;
+        private IAccountAppService AccountAppService;
         private ApplicationContext db;
-        public AccountController(IAccountService accountService, ApplicationContext db)
+        public AccountController(IAccountAppService accountAppService, ApplicationContext db)
         {
-            AccountService = accountService;
+            AccountAppService = accountAppService;
             this.db= db;
         }
         public async Task<IActionResult> Profile()
         {
             return View
-                (
-                    db.Country.Include(c => c.City).ToList()
-                );
+            (
+                db.Country.Include(c => c.City).ToList()
+            );
         }
 
         public async Task<IActionResult> Exit()
@@ -37,7 +38,7 @@ namespace Behoof.Areas.Account.Controllers
         public async Task<IActionResult> Delete(string id)
         {
 
-            await AccountService.Delete(id);
+            await AccountAppService.Delete(id);
 
             HttpContext.Request.Headers.Remove("Authorization");
             HttpContext.Response.Cookies.Delete("JwtToken");
@@ -45,10 +46,10 @@ namespace Behoof.Areas.Account.Controllers
             return RedirectToAction("Index", "Home", new {area = "" });
         }
 
-        public async Task<IActionResult> Update(User? user)
+        public async Task<IActionResult> Update(UserUpdateDto? userUpdateDto)
         {
-            var data = await AccountService.Update(user);
-            await AccountService.Login(data);
+            var data = await AccountAppService.Update(userUpdateDto);
+            //await AccountService.Login(data);
 
             return new JsonResult(new { message = "" });
         }
