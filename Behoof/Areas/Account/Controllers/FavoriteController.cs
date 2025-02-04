@@ -27,38 +27,31 @@ namespace Behoof.Areas.Account.Controllers
         {
             var userId = HttpContext.User.Claims.FirstOrDefault(u => u.Type == "Id")?.Value;
 
-            var favoriteProduct = db.Users
-                .Where(u => u.Id == userId)
-                .Include(f => f.Favorite)
-                .SelectMany(f => f.Favorite.FavoriteItem.Select(fi => fi.ProductId))
-                .ToList();
 
-            var supplierItems = db.SupplierItem
-                .Where(s => s.Products.Any(p => favoriteProduct.Contains(p.Id)))
-                .Select(g => new SupplierItem
+            var favoriteProduct = db.Favorite
+                .Include(f => f.FavoriteItem)!
+                .ThenInclude(fi => fi.Product)
+                .ThenInclude(fi => fi.HistoryProduct)
+                .Include(f => f.User)
+                .Where(u => u.User.Id == userId)
+                .SelectMany(f => f.FavoriteItem)
+                .Select(g => new Product
                 {
-                    Id = g.Id,
-                    MinPrice = g.MinPrice,
-                    MaxPrice = g.MaxPrice,
-                    Products = g.Products
-                                .OrderBy(p => p.DateCreate)
-                                .Select(p => new Product
-                                {
-                                    Id = p.Id,
-                                    Name = p.Name,
-                                    Price = p.Price,
-                                    DateCreate = p.DateCreate,
-                                    ImageLink = p.ImageLink,
-                                })
-                                .ToList()
-                                        
-                }).ToList();
+                    Id = g.Product.Id,
+                    Name = g.Product.Name,
+                    Price = g.Product.Price,
+                    MaxPrice = g.Product.MaxPrice,
+                    MinPrice = g.Product.MinPrice,
+                    HistoryProduct = g.Product.HistoryProduct.Select(h => new HistoryProduct
+                    {
+                        DateUpdate = h.DateUpdate,
+                    }).ToList()
+                }).ToList()
+                ;
 
-            FavoriteViewModel model = new FavoriteViewModel()
-            {
-                SupplierItems = supplierItems
-            };
-            return View(model);
+
+
+            return View(favoriteProduct);
         }
 
         public async Task<IActionResult> Add(string productId)

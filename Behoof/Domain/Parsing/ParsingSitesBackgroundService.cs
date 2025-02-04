@@ -21,7 +21,7 @@ namespace Behoof.Domain.Parsing
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if(DateTime.Now.Hour >= 0 &&  DateTime.Now.Hour < 15)
+                if(DateTime.Now.Hour >= 1 &&  DateTime.Now.Hour < 2)
                 {
                     await _Semaphore.WaitAsync(stoppingToken);
                     using(var scope = ServiceProvider.CreateScope())
@@ -35,13 +35,15 @@ namespace Behoof.Domain.Parsing
                             factory.CreateSupplier("Mvideo")
                         };
 
-                        var tasks = suppliers.Select(async item =>
+                        foreach(var item in suppliers)
                         {
-                            await item.LoadPage();
-                            await item.SaveOnDb();
-                            await item.Update();
-                        });
-                        await Task.WhenAll(tasks);
+                            await Task.Run(async() =>
+                            {
+                                await item.LoadPage();
+                                await item.SaveOnDb();
+                                await item.Update();
+                            });
+                        }
                     }
                     _Semaphore.Release();
                 }

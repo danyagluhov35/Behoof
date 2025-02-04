@@ -16,9 +16,10 @@ namespace Behoof.Domain.Entity
         public string? Description { get; set; }
         public string? ImageLink { get; set; }
         public decimal? Price { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
         public DateTime? DateCreate { get; set; }
 
-        [JsonIgnore]
         public Category? Category { get; set; }
         public string? CategoryId { get; set; }
 
@@ -54,6 +55,8 @@ namespace Behoof.Domain.Entity
 
         /*public List<Review> Review { get; set; } */// Отзывы
         public List<SupplierProduct>? SupplierProducts { get; set; }
+        [JsonIgnore]
+        public List<HistoryProduct>? HistoryProduct { get; set; }
     }
 
 }

@@ -4,7 +4,6 @@
     {
         public string Id { get; set; }
         public string? Name { get; set; }
-        public List<SupplierItem>? SupplierItem { get; set; }
         public List<SupplierProduct>? SupplierProducts { get; set; }
     }
 }

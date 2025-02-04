@@ -1,12 +1,12 @@
 ﻿@addTagHelper *, Syncfusion.EJ2
-@using Behoof.ViewModels;
-@model FavoriteViewModel
+@using Behoof.Domain.Entity;
+@model List<Product>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="/css/Favorite/Favorite.css" />
 <script src="https://cdn.syncfusion.com/ej2/28.1.33/dist/ej2.min.js"></script>
-@if(Model?.SupplierItems.Count() < 1){
+@if(Model.Count <= 0){
     <div class="error">
         <div class="error-container">
             <h1>Пусто</h1>
@@ -30,17 +30,17 @@ else{
 
             <div class="favorite-items">
                 
-                @foreach (var item in Model.SupplierItems)
+                @foreach (var item in Model)
                 {
                     <div class="favorite-item-container">
                         <div class="favorite-item">
                             <div class="favorite-item-top">
                                 <div class="faovite-item-image">
-                                    <img src="@item.Products.FirstOrDefault().ImageLink" alt="">
+                                    <img src="@item.ImageLink" alt="">
                                 </div>
                                 <div class="favorite-item-top-right">
                                     <p class="favorite-item-top-right-category"></p>
-                                    <p class="favorite-item-top-right-product-name">@item.Products.FirstOrDefault().Name</p>
+                                    <p class="favorite-item-top-right-product-name">@item.Name</p>
                                     <div class="favorite-item-top-right-manage">
                                         <a href="#" class="favorite-item-top-right-manage-like">
                                             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,7 +92,7 @@ else{
                                     </div>
                                 </div>
                                 <div class="favorite-item-bottom-right">
-                                    <ejs-chart id="@item.Products.FirstOrDefault().Id" background="none" width="100%" height="135px">
+                                    <ejs-chart id="@item.Id" background="none" width="100%" height="135px">
                                         <e-chart-primaryxaxis valueType="DateTime" labelFormat="d">
                                             
                                         </e-chart-primaryxaxis>
@@ -100,8 +100,8 @@ else{
                                             
                                         </e-chart-primaryyaxis>
                                         <e-series-collection>
-                                            <e-series fill="rgba(255, 0, 0, 0.5)" dataSource="@item.Products"
-                                                          xName="DateCreate"
+                                            <e-series fill="rgba(255, 0, 0, 0.5)" dataSource="@item.HistoryProduct"
+                                                          xName="DateUpdate"
                                                           yName="Price"
                                                           type="SplineArea">
                                                 <e-series-animation enable="true" duration="1000"></e-series-animation>

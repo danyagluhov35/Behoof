@@ -138,6 +138,27 @@ namespace Behoof.Migrations
                     b.ToTable("FavoriteItem");
                 });
 
+            modelBuilder.Entity("Behoof.Domain.Entity.HistoryProduct", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("DateUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("HistoryProduct");
+                });
+
             modelBuilder.Entity("Behoof.Domain.Entity.Memory", b =>
                 {
                     b.Property<string>("Id")
@@ -218,8 +239,14 @@ namespace Behoof.Migrations
                     b.Property<string>("ImageLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("MaxPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("MemoryId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal?>("MinPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -232,9 +259,6 @@ namespace Behoof.Migrations
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("SupplierItemId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SystemId")
                         .HasColumnType("nvarchar(450)");
@@ -258,8 +282,6 @@ namespace Behoof.Migrations
 
                     b.HasIndex("PowerId");
 
-                    b.HasIndex("SupplierItemId");
-
                     b.HasIndex("SystemId");
 
                     b.HasIndex("YearOfRealiseId");
@@ -278,30 +300,6 @@ namespace Behoof.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Supplier");
-                });
-
-            modelBuilder.Entity("Behoof.Domain.Entity.SupplierItem", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("DateOfCreate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("MaxPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MinPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("SupplierItem");
                 });
 
             modelBuilder.Entity("Behoof.Domain.Entity.SupplierProduct", b =>
@@ -403,6 +401,15 @@ namespace Behoof.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Behoof.Domain.Entity.HistoryProduct", b =>
+                {
+                    b.HasOne("Behoof.Domain.Entity.Product", "Product")
+                        .WithMany("HistoryProduct")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Behoof.Domain.Entity.Product", b =>
                 {
                     b.HasOne("Behoof.Domain.Entity.Camera", "Camera")
@@ -433,10 +440,6 @@ namespace Behoof.Migrations
                         .WithMany("Product")
                         .HasForeignKey("PowerId");
 
-                    b.HasOne("Behoof.Domain.Entity.SupplierItem", null)
-                        .WithMany("Products")
-                        .HasForeignKey("SupplierItemId");
-
                     b.HasOne("Behoof.Domain.Entity.System", "System")
                         .WithMany("Product")
                         .HasForeignKey("SystemId");
@@ -462,15 +465,6 @@ namespace Behoof.Migrations
                     b.Navigation("System");
 
                     b.Navigation("YearOfRealise");
-                });
-
-            modelBuilder.Entity("Behoof.Domain.Entity.SupplierItem", b =>
-                {
-                    b.HasOne("Behoof.Domain.Entity.Supplier", "Supplier")
-                        .WithMany("SupplierItem")
-                        .HasForeignKey("SupplierId");
-
-                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Behoof.Domain.Entity.SupplierProduct", b =>
@@ -559,19 +553,14 @@ namespace Behoof.Migrations
 
             modelBuilder.Entity("Behoof.Domain.Entity.Product", b =>
                 {
+                    b.Navigation("HistoryProduct");
+
                     b.Navigation("SupplierProducts");
                 });
 
             modelBuilder.Entity("Behoof.Domain.Entity.Supplier", b =>
                 {
-                    b.Navigation("SupplierItem");
-
                     b.Navigation("SupplierProducts");
-                });
-
-            modelBuilder.Entity("Behoof.Domain.Entity.SupplierItem", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Behoof.Domain.Entity.System", b =>
