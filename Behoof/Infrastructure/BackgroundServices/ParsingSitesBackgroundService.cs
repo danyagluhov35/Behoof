@@ -19,7 +19,7 @@ namespace Behoof.Infrastructure.BackgroundServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 2)
+                if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 23)
                 {
                     await _Semaphore.WaitAsync(stoppingToken);
                     using (var scope = ServiceProvider.CreateScope())
@@ -39,7 +39,7 @@ namespace Behoof.Infrastructure.BackgroundServices
                             {
                                 await item.LoadPage();
                                 await item.SaveOnDb();
-                                await item.Update();
+                                //await item.Update();
                             });
                         }
                     }

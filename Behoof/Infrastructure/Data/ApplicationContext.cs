@@ -25,7 +25,7 @@ namespace Behoof.Infrastructure.Data
         public DbSet<SupplierProduct> SupplierProduct { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-82QJ6HP;Database=Behoof3;Trusted_Connection=True;Encrypt=False");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-82QJ6HP;Database=Behoof;Trusted_Connection=True;Encrypt=False");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
