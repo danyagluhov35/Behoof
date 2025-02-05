@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using Microsoft.EntityFrameworkCore;
 using Behoof.Infrastructure.Data;
 using Behoof.Core.Entities;
+using Behoof.Core.Services;
 
 namespace Behoof.Infrastructure.Service
 {
@@ -13,6 +14,7 @@ namespace Behoof.Infrastructure.Service
         public string Name { get; set; }
 
         private protected ApplicationContext db;
+        private protected TrimProductName? TrimProductName { get; set; }
         private protected string? Url { get; set; }
         private protected string? ClassElementCard { get; set; }
         private protected string? ClassElementName { get; set; }
@@ -29,13 +31,16 @@ namespace Behoof.Infrastructure.Service
 
         public SupplierParsing(SupplierSetting supplierSetting, ApplicationContext db)
         {
+            TrimProductName = new TrimProductName();
+            this.db = db;
+
             Option = new ChromeOptions();
             //Option.AddArgument("--headless");
             Option.AddArgument("--disable-blink-features=AutomationControlled");
 
             Document = new HtmlDocument();
             Driver = new ChromeDriver(Option);
-            WaitDriver = new WebDriverWait(Driver, TimeSpan.FromSeconds(15));
+            WaitDriver = new WebDriverWait(Driver, TimeSpan.FromSeconds(25));
             Url = supplierSetting.Url;
             ClassElementCard = supplierSetting.ClassElementCard;
             ClassElementName = supplierSetting.ClassElementName;
@@ -43,22 +48,22 @@ namespace Behoof.Infrastructure.Service
             _SupplierId = supplierSetting.SupplierId;
             JavaScriptExecutor = (IJavaScriptExecutor)Driver;
             ClassElementButtonMore = supplierSetting.ClassElementBtnMore;
-            this.db = db;
         }
 
         public virtual async Task LoadPage()
         {
             Driver.Navigate().GoToUrl(Url);
-            Thread.Sleep(3000);
+            Thread.Sleep(8000);
             while (true)
             {
                 try
                 {
                     JavaScriptExecutor.ExecuteScript("window.scrollTo(0, document.body.scrollHeight);");
+                    Thread.Sleep(1000);
                     var loadMoreButton = WaitDriver.Until(d => d.FindElement(By.XPath(ClassElementButtonMore)));
 
                     JavaScriptExecutor.ExecuteScript("arguments[0].scrollIntoView({block: 'center'});", loadMoreButton);
-                    Thread.Sleep(500);
+                    Thread.Sleep(1500);
                     JavaScriptExecutor.ExecuteScript("arguments[0].click();", loadMoreButton);
                     Thread.Sleep(3000);
                 }
@@ -84,10 +89,10 @@ namespace Behoof.Infrastructure.Service
             {
                 foreach (var item in productNodes)
                 {
-                    var name = item.SelectSingleNode(ClassElementName).InnerText.Replace(" ", "") ?? null;
-                    var price = item.SelectSingleNode(ClassElementPrice) ?? null;
+                    var name = TrimProductName.TrimName(item.SelectSingleNode(ClassElementName)?.InnerText.TrimStart());
+                    var price = item.SelectSingleNode(ClassElementPrice)?.InnerText.Replace("&nbsp;", "").Replace("₽", "") ?? "";
 
-                    if (name != null && price != null)
+                    if (name != "" && price != "")
                     {
                         var product = db.SupplierProduct
                             .Include(p => p.Supplier)
@@ -99,10 +104,10 @@ namespace Behoof.Infrastructure.Service
                         {
                             var productData = new Product()
                             {
-                                Name = name.InnerText,
-                                Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
-                                MinPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
-                                MaxPrice = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", "")),
+                                Name = name,
+                                Price = Convert.ToDecimal(price),
+                                MinPrice = Convert.ToDecimal(price),
+                                MaxPrice = Convert.ToDecimal(price),
                                 CategoryId = "1",
                                 BallAnswer = new Random().Next(1,5),
                                 BallBatery = new Random().Next(1,5),
@@ -134,7 +139,7 @@ namespace Behoof.Infrastructure.Service
             {
                 foreach (var item in productNodes)
                 {
-                    var name = item.SelectSingleNode(ClassElementName);
+                    var name = item.SelectSingleNode(ClassElementName).InnerText.TrimStart() ?? "";
                     var price = item.SelectSingleNode(ClassElementPrice);
 
                     if (name != null && price != null)
@@ -142,7 +147,7 @@ namespace Behoof.Infrastructure.Service
                         var product = db.SupplierProduct
                             .Include(p => p.Supplier)
                             .Include(p => p.Product)
-                            .Where(p => p.Product.Name == name.InnerText && p.Supplier.Id == _SupplierId)
+                            .Where(p => p.Product.Name == name && p.Supplier.Id == _SupplierId)
                             .FirstOrDefault();
 
                         if (product != null)
@@ -162,7 +167,7 @@ namespace Behoof.Infrastructure.Service
                             db.SaveChanges();
 
 
-                            product.Product.Price = Convert.ToDecimal(price.InnerText.Replace("&nbsp;", "").Replace("₽", ""));
+                            product.Product.Price = Convert.ToDecimal(price);
                             product.Product.MinPrice = productHistory.Min(p => p.Product.Price);
                             product.Product.MaxPrice = productHistory.Max(p => p.Product.Price);
 

@@ -4,6 +4,7 @@ using AutoMapper;
 using Behoof.Application.IService;
 using Behoof.Application.Service;
 using Behoof.Core.JwtTokenSetting;
+using Behoof.Core.Services;
 using Behoof.Infrastructure.BackgroundServices;
 using Behoof.Infrastructure.Data;
 using Behoof.Infrastructure.IService;
@@ -35,6 +36,7 @@ builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<IProductAppService, ProductAppService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+builder.Services.AddScoped<TrimProductName>();
 
 
 builder.Services.AddTransient<IFoldProductMemoryCacheService, FoldProductMemoryCacheService>();
