@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  server:
+    container_name: people-apis
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      sql:
+        condition: service_healthy
+
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong(!)Pass123
+    volumes:
+      - sql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "echo quit | /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $$MSSQL_SA_PASSWORD"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  sql-data:
+    driver: local
