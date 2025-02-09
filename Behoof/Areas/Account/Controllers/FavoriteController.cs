@@ -44,6 +44,7 @@ namespace Behoof.Areas.Account.Controllers
                     HistoryProduct = g.Product.HistoryProduct.Select(h => new HistoryProduct
                     {
                         DateUpdate = h.DateUpdate,
+                        Price = h.Price
                     }).ToList()
                 })
                 .ToList();
