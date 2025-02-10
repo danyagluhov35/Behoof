@@ -15,21 +15,33 @@ namespace Behoof.Controllers
         private IProductAppService ProductAppService;
         private IFoldProductMemoryCacheService FoldProductMemoryCacheService;
         private ApplicationContext db;
-        public HomeController(ICategoryAppService categoryAppService, IProductAppService productAppService, IFoldProductMemoryCacheService foldProductMemoryCacheService, ApplicationContext db)
+
+        private readonly ILogger<HomeController> Logger;
+        public HomeController(ICategoryAppService categoryAppService, IProductAppService productAppService, 
+            IFoldProductMemoryCacheService foldProductMemoryCacheService, ApplicationContext db, ILogger<HomeController> logger)
         {
             CategoryAppService = categoryAppService;
             ProductAppService = productAppService;
             FoldProductMemoryCacheService = foldProductMemoryCacheService;
             this.db = db;
+            Logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            HomeViewModel model = new HomeViewModel() 
+            HomeViewModel model = null!;
+            try
             {
-                Product = db.Product.Where(p => p.DateCreate.Value.Day <= 30).Include(p => p.Category).Take(10).ToList(),
-                Category = await CategoryAppService.GetCategories()
-            };
+                model = new HomeViewModel()
+                {
+                    Product = db.Product.Where(p => p.DateCreate.Value.Day <= 30).Include(p => p.Category).Take(10).ToList(),
+                    Category = await CategoryAppService.GetCategories()
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message);
+            }
             return View(model);
         }
 

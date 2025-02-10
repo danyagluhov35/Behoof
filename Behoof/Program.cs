@@ -14,10 +14,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlServer("Server=DESKTOP-82QJ6HP;Database=MyDataBase;Trusted_Connection=True;Encrypt=False;"));
+    options.UseSqlServer(@"Server=host.docker.internal,1433;Database=Behoof;User Id=DESKTOP-82QJ6HP\deni3;"));
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews().AddJsonOptions(op =>

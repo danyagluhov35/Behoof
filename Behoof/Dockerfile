@@ -1,12 +1,21 @@
-# Сборка
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
-COPY . .
+
+
+COPY *.csproj ./
 RUN dotnet restore
+COPY . ./
 RUN dotnet publish -c Release -o /out
 
-# Запуск
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /out .
-ENTRYPOINT ["dotnet", "Behoof"]
+
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+# 5. Запускаем приложение
+ENTRYPOINT ["dotnet", "Behoof.dll"]

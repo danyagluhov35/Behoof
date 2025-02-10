@@ -19,7 +19,7 @@ namespace Behoof.Infrastructure.BackgroundServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (DateTime.Now.Hour >= 1 && DateTime.Now.Hour < 23)
+                if (DateTime.Now.Hour >= 23 && DateTime.Now.Hour < 24)
                 {
                     await _Semaphore.WaitAsync(stoppingToken);
                     using (var scope = ServiceProvider.CreateScope())
@@ -29,7 +29,7 @@ namespace Behoof.Infrastructure.BackgroundServices
 
                         SupplierParsing[] suppliers =
                         {
-                            factory.CreateSupplier("CityLink"),
+                            //factory.CreateSupplier("CityLink"),
                             factory.CreateSupplier("Mvideo")
                         };
 
@@ -37,9 +37,10 @@ namespace Behoof.Infrastructure.BackgroundServices
                         {
                             await Task.Run(async () =>
                             {
-                                await item.LoadPage();
-                                await item.SaveOnDb();
-                                //await item.Update();
+                                int scrollHeight = await item.LoadFullPage();
+                                var elements = await item.LoadElements(scrollHeight);
+                                //await item.SaveOnDb(elements);
+                                await item.Update(elements);
                             });
                         }
                     }

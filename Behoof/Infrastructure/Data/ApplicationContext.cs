@@ -41,6 +41,18 @@ namespace Behoof.Infrastructure.Data
                 .HasOne(sp => sp.Product)
                 .WithMany(p => p.SupplierProducts)
                 .HasForeignKey(sp => sp.ProductId);
+
+
+
+            modelBuilder.Entity<Category>().HasData
+                (
+                    new Category() { Id = "1", Name = "Смарфтоны"}
+                );
+            modelBuilder.Entity<Supplier>().HasData
+                (
+                    new Supplier() { Id = "1", Name = "CityLink" },
+                    new Supplier() { Id = "2", Name = "Mvideo" }
+                );
         }
     }
 }
