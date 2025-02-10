@@ -22,7 +22,7 @@ builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseSqlServer(@"Server=host.docker.internal,1433;Database=Behoof;User Id=DESKTOP-82QJ6HP\deni3;"));
+    options.UseSqlServer(@"Server=192.168.1.19,1433;Database=Behoof;User Id=sa;Password=YourStrong(!)Pass123;TrustServerCertificate=True"));
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddControllersWithViews().AddJsonOptions(op =>

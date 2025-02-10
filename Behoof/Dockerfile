@@ -17,5 +17,5 @@ COPY --from=build /out .
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-# 5. Запускаем приложение
+
 ENTRYPOINT ["dotnet", "Behoof.dll"]
