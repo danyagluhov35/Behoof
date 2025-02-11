@@ -39,7 +39,7 @@ namespace Behoof.Infrastructure.BackgroundServices
                             {
                                 int scrollHeight = await item.LoadFullPage();
                                 var elements = await item.LoadElements(scrollHeight);
-                                //await item.SaveOnDb(elements);
+                                await item.SaveOnDb(elements);
                                 await item.Update(elements);
                             });
                         }

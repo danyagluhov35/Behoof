@@ -29,5 +29,4 @@ COPY --from=build /app/publish .
 EXPOSE 80
 
 
-# 5. Запускаем приложение
 ENTRYPOINT ["dotnet", "Behoof.dll"]

@@ -66,6 +66,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 
 var app = builder.Build();
+app.UseStaticFiles();
+app.UseDefaultFiles();
+app.Urls.Add("http://0.0.0.0:80");
 app.UseMiddleware<JwtSecurity>();
 app.UseSession();
 
@@ -88,8 +91,6 @@ app.MapControllerRoute
         pattern: "{controller=Favorite}/{action=Favorite}/{id?}"
     );
 
-app.UseStaticFiles();
-app.UseDefaultFiles();
 
 
 

@@ -23,10 +23,6 @@ namespace Behoof.Infrastructure.Data
         public DbSet<Supplier> Supplier { get; set; } = null!;
         public DbSet<HistoryProduct> HistoryProduct { get; set; } = null!;
         public DbSet<SupplierProduct> SupplierProduct { get; set; } = null!;
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-82QJ6HP;Database=Behoof;Trusted_Connection=True;Encrypt=False");
-        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SupplierProduct>()

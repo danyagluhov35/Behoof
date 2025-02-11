@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <Folder Include="Core\IServices\" />
+    <Folder Include="wwwroot\css\Home\" />
   </ItemGroup>
 
 </Project>
